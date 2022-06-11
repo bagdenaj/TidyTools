@@ -1,82 +1,184 @@
-import kivy
-kivy.require('1.1.1')
+from kivy.lang import Builder
 
-from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.properties import (
-    NumericProperty, ReferenceListProperty, ObjectProperty, BooleanProperty
-)
-from kivy.vector import Vector
-from kivy.clock import Clock
+from kivymd.app import MDApp
+from kivymd.uix.list import OneLineListItem
+from kivy.uix.screenmanager import Screen
+from kivy.uix.boxlayout import BoxLayout
+from jnius import autoclass
+from kivy.logger import Logger
+
+from kivy.utils import platform
+
+# if platform == 'android':
+#     from jnius import autoclass, cast
+#     JS = autoclass('java.lang.String')
+#     Intent = autoclass('android.content.Intent')
+#     PythonActivity = autoclass('org.kivy.android.PythonActivity')
+#     currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
+
+KV = '''
+<ManufacturesSelect>:
+    id: manufacture_select
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        padding: dp(20)
+        pos_hint:{'y': 0.85}
+
+        BoxLayout:
+            size_hint_y: None
+            height: self.minimum_height
+
+            MDIconButton:
+                icon: 'magnify'
+
+            MDTextField:
+                id: search_field
+                hint_text: 'Search for Manufacturer'
+                on_text: 
+                    root.set_manf_list(self.text)
+
+    RecycleView:
+        pos_hint:{'center_y': 0.4}
+
+        MDList:
+            id: manufacture
+
+    BoxLayout:
+        id: tool_select
+
+<ToolSelect>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        padding: dp(20)
+        pos_hint:{'y': 0.75}
+        
+        BoxLayout:
+            size_hint_y: None
+            height: self.minimum_height
+
+            MDIconButton:
+                icon: 'magnify'
+
+            MDTextField:
+                id: search_tool
+                hint_text: 'Search for tool'
+                on_text: 
+                    root.set_tools_list(self.text)
+
+    RecycleView:
+        pos_hint:{'center_x': 0.5, 'center_y': 0.3}
+
+        MDList:
+            id: tools
+    
+
+'''
+
+manufactures = [
+    "Stihl",
+    "Obi",
+    "ABUS",
+    "Bosch",
+    "HYMER"
+]
+
+tools = [
+    "Kettensäge",
+    "Presslufthammer",
+    "Schleifgerät",
+    "Nagel"
+]
 
 
-class PongPaddle(Widget):
-    score = NumericProperty(0)
-    can_bounce = BooleanProperty(True)
+def set_schedule(title):
+    try:
+        System = autoclass ('java.lang.System')
+        intent = autoclass('android.content.Intent')
+        Calendar = autoclass('java.util.Calendar')
+        calendar = Calendar.getInstance()
+        calendar.setTimeInMillis(System.currentTimeMillis())
+        intent.setType("vnd.android.cursor.item/event")
+        intent.putExtra(Events.TITLE, title)
+        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+        intent.putExtra("title", "A Test Event from android app")
+        intent.setAction(intent.ACTION_INSERT)
+        PythonActivity = autoclass('org.kivy.android.PythonActivity')
+        PythonActivity.mActivity.startActivity(intent)
+    except Exception as err:
+            Logger.exception(err)
 
-    def bounce_ball(self, ball):
-        if self.collide_widget(ball) and self.can_bounce:
-            vx, vy = ball.velocity
-            offset = (ball.center_y - self.center_y) / (self.height / 2)
-            bounced = Vector(-1 * vx, vy)
-            vel = bounced * 1.1
-            ball.velocity = vel.x, vel.y + offset
-            self.can_bounce = False
-        elif not self.collide_widget(ball) and not self.can_bounce:
-            self.can_bounce = True
+class ManufacturesSelect(Screen):
+    def __init__(self, **kwargs) -> None:
+        super(ManufacturesSelect, self).__init__(**kwargs)
 
+    def add_toolselect(self):
+        try:
+            toolselect = ToolSelect()
+            self.ids.tool_select.add_widget(toolselect)
+        except Exception as err:
+            Logger.exception(err)
 
-class PongBall(Widget):
-    velocity_x = NumericProperty(0)
-    velocity_y = NumericProperty(0)
-    velocity = ReferenceListProperty(velocity_x, velocity_y)
-
-    def move(self):
-        self.pos = Vector(*self.velocity) + self.pos
-
-
-class PongGame(Widget):
-    ball = ObjectProperty(None)
-    player1 = ObjectProperty(None)
-    player2 = ObjectProperty(None)
-
-    def serve_ball(self, vel=(4, 0)):
-        self.ball.center = self.center
-        self.ball.velocity = vel
-
-    def update(self, dt):
-        self.ball.move()
-
-        # bounce ball off paddles
-        self.player1.bounce_ball(self.ball)
-        self.player2.bounce_ball(self.ball)
-
-        # bounce ball off bottom or top
-        if (self.ball.y < self.y) or (self.ball.top > self.top):
-            self.ball.velocity_y *= -1
-
-        # went off a side to score point?
-        if self.ball.x < self.x:
-            self.player2.score += 1
-            self.serve_ball(vel=(4, 0))
-        if self.ball.right > self.width:
-            self.player1.score += 1
-            self.serve_ball(vel=(-4, 0))
-
-    def on_touch_move(self, touch):
-        if touch.x < self.width / 3:
-            self.player1.center_y = touch.y
-        if touch.x > self.width - self.width / 3:
-            self.player2.center_y = touch.y
+    def pressed(self, value):
+        try:
+            self.ids.manufacture.clear_widgets()
+            self.ids.search_field.text = value.text + " "
+            self.add_toolselect()
+        except Exception as err:
+            Logger.exception(err)
 
 
-class PongApp(App):
+    def set_manf_list(self, text=" "):
+        try:
+            self.ids.tool_select.clear_widgets()
+            self.ids.manufacture.clear_widgets()
+            for man in manufactures:
+                if text.casefold() in man.casefold():
+                    self.ids.manufacture.add_widget(
+                        OneLineListItem(text=man,on_press=self.pressed)
+                    )
+        except Exception as err:
+            Logger.exception(err)
+
+class ToolSelect(BoxLayout):
+    def __init__(self, **kwargs) -> None:
+        super(ToolSelect, self).__init__(**kwargs)
+
+    def pressed(self, value):
+        try:
+            self.ids.tools.clear_widgets()
+            self.ids.search_tool.text = value.text + " "
+            # need to somehow disable set_list() after here
+            set_schedule(value.text)
+        except Exception as err:
+            Logger.exception(err)
+
+
+
+    def set_tools_list(self, text=" "):
+        try:
+            self.ids.tools.clear_widgets()
+            for tool in tools:
+                if text.casefold() in tool.casefold():
+                    self.ids.tools.add_widget(
+                        OneLineListItem(text=tool,on_press=self.pressed)
+                    )
+        except Exception as err:
+            Logger.exception(err)
+
+
+class Test(MDApp):
     def build(self):
-        game = PongGame()
-        game.serve_ball()
-        Clock.schedule_interval(game.update, 1.0 / 60.0)
-        return game
+        Logger.info("Building app")
+        Builder.load_string(KV)
+        
+        self.screen = ManufacturesSelect(name="manufacture_select")
+        Logger.info("Screen instanciated")
+        return self.screen
 
+    def on_start(self):
+        Logger.info("On_start")
+        self.screen.set_manf_list()
 
-if __name__ == '__main__':
-    PongApp().run()
+Test().run()
