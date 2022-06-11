@@ -40,8 +40,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: data
-          ref: data # Branch name
+          path: .
+          ref: main # Branch name
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -51,4 +51,4 @@ jobs:
 
       - name: Push binary to data branch
         if: github.event_name == 'push'
-        run: python master/.ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" master data bin
+        run: python master/.ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" main main bin
