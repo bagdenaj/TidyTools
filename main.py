@@ -91,18 +91,18 @@ tools = [
 ]
 
 
-def set_schedule(title):
-    System = autoclass ('java.lang.System')
-    intent = autoclass('android.content.Intent')
-    Calendar = autoclass('java.util.Calendar')
-    calendar = Calendar.getInstance()
-    calendar.setTimeInMillis(System.currentTimeMillis())
-    intent.setType("vnd.android.cursor.item/event")
-    intent.putExtra(Events.TITLE, title)
-    intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
-    intent.putExtra("title", "A Test Event from android app");
-    intent.setAction(Intent.ACTION_INSERT)
-    PythonActivity.mActivity.startActivity(intent)
+# def set_schedule(title):
+#     System = autoclass ('java.lang.System')
+#     intent = autoclass('android.content.Intent')
+#     Calendar = autoclass('java.util.Calendar')
+#     calendar = Calendar.getInstance()
+#     calendar.setTimeInMillis(System.currentTimeMillis())
+#     intent.setType("vnd.android.cursor.item/event")
+#     intent.putExtra(Events.TITLE, title)
+#     intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+#     intent.putExtra("title", "A Test Event from android app")
+#     intent.setAction(Intent.ACTION_INSERT)
+#     PythonActivity.mActivity.startActivity(intent)
 
 class ManufacturesSelect(Screen):
     def __init__(self, **kwargs) -> None:
@@ -137,7 +137,7 @@ class ToolSelect(BoxLayout):
         self.ids.search_tool.text = value.text + " "
         # need to somehow disable set_list() after here
         print(value.text)
-        set_schedule(value.text)
+        # set_schedule(value.text)
 
 
 
