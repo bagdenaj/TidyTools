@@ -16,7 +16,7 @@ if platform == 'android':
     currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
 
 KV = '''
-<ManufacturesSelect>
+<ManufacturesSelect>:
     id: manufacture_select
     BoxLayout:
         orientation: 'vertical'
@@ -46,7 +46,7 @@ KV = '''
     BoxLayout:
         id: tool_select
 
-<ToolSelect>
+<ToolSelect>:
     BoxLayout:
         orientation: 'vertical'
         spacing: dp(10)
@@ -116,7 +116,6 @@ class ManufacturesSelect(Screen):
         self.ids.manufacture.clear_widgets()
         self.ids.search_field.text = value.text + " "
         self.add_toolselect()
-        print(value.text)
 
 
     def set_manf_list(self, text=" "):
@@ -136,7 +135,6 @@ class ToolSelect(BoxLayout):
         self.ids.tools.clear_widgets()
         self.ids.search_tool.text = value.text + " "
         # need to somehow disable set_list() after here
-        print(value.text)
         # set_schedule(value.text)
 
 
