@@ -4,7 +4,7 @@ from kivymd.app import MDApp
 from kivymd.uix.list import OneLineListItem
 from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
-from jnius import autoclass
+# from jnius import autoclass
 from kivy.logger import Logger
 
 from kivy.utils import platform
@@ -92,22 +92,22 @@ tools = [
 ]
 
 
-def set_schedule(title):
-    try:
-        System = autoclass ('java.lang.System')
-        intent = autoclass('android.content.Intent')
-        Calendar = autoclass('java.util.Calendar')
-        calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(System.currentTimeMillis())
-        intent.setType("vnd.android.cursor.item/event")
-        intent.putExtra(Events.TITLE, title)
-        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
-        intent.putExtra("title", "A Test Event from android app")
-        intent.setAction(Intent.ACTION_INSERT)
-        PythonActivity = autoclass('org.kivy.android.PythonActivity')
-        PythonActivity.mActivity.startActivity(intent)
-    except Exception as err:
-            Logger.exception(err)
+# def set_schedule(title):
+#     try:
+#         System = autoclass ('java.lang.System')
+#         intent = autoclass('android.content.Intent')
+#         Calendar = autoclass('java.util.Calendar')
+#         calendar = Calendar.getInstance()
+#         calendar.setTimeInMillis(System.currentTimeMillis())
+#         intent.setType("vnd.android.cursor.item/event")
+#         intent.putExtra(Events.TITLE, title)
+#         intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+#         intent.putExtra("title", "A Test Event from android app")
+#         intent.setAction(Intent.ACTION_INSERT)
+#         PythonActivity = autoclass('org.kivy.android.PythonActivity')
+#         PythonActivity.mActivity.startActivity(intent)
+#     except Exception as err:
+#             Logger.exception(err)
 
 class ManufacturesSelect(Screen):
     def __init__(self, **kwargs) -> None:
@@ -150,7 +150,7 @@ class ToolSelect(BoxLayout):
             self.ids.tools.clear_widgets()
             self.ids.search_tool.text = value.text + " "
             # need to somehow disable set_list() after here
-            set_schedule(value.text)
+            # set_schedule(value.text)
         except Exception as err:
             Logger.exception(err)
 
