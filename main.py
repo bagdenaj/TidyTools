@@ -1,3 +1,4 @@
+from calendar import Calendar
 from kivy.lang import Builder
 
 from kivymd.app import MDApp
@@ -94,16 +95,24 @@ tools = [
 
 def set_schedule(title):
     try:
-        System = autoclass ('java.lang.System')
+        # System = autoclass ('java.lang.System')
         Intent = autoclass('android.content.Intent')
+        Events = autoclass("android.provider.CalendarContract.Events")
+        Calendar = autoclass("android.provider.CalendarContract.Instance")
+        CalendarContract = autoclass('android.provider.CalendarContract')
+        begin_time = Calendar()
+        end_time = Calendar()
+        events = Events()
         intent = Intent()
-        Calendar = autoclass('java.util.Calendar')
-        calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(System.currentTimeMillis())
-        intent.setType("vnd.android.cursor.item/event")
-        intent.putExtra(Events.TITLE, title)
-        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
-        intent.putExtra("title", "A Test Event from android app")
+        calendarcontract = CalendarContract()
+        begin_time.set(2022, 5, 12, 7, 30)
+        end_time.set(2022, 5, 12, 13, 30)
+        # calendar.setTimeInMillis(System.currentTimeMillis())
+        intent.setData(events.CONTENT_URI)
+        intent.putExtra(calendarcontract.EXTRA_EVENT_BEGIN_TIME, begin_time.getTimeInMillis())
+        intent.putExtra(calendarcontract.EXTRA_EVENT_END_TIME, end_time.getTimeInMillis())
+        intent.putExtra(events.TITLE, title)
+        intent.putExtra(events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
         intent.setAction(intent.ACTION_INSERT)
         PythonActivity = autoclass('org.kivy.android.PythonActivity')
         PythonActivity.mActivity.startActivity(intent)
