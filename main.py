@@ -95,7 +95,8 @@ tools = [
 def set_schedule(title):
     try:
         System = autoclass ('java.lang.System')
-        intent = autoclass('android.content.Intent')
+        Intent = autoclass('android.content.Intent')
+        intent = Intent()
         Calendar = autoclass('java.util.Calendar')
         calendar = Calendar.getInstance()
         calendar.setTimeInMillis(System.currentTimeMillis())
