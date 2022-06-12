@@ -126,7 +126,7 @@ fullscreen = 0
 # android.accept_sdk_license = False
 
 # (str) Android entry point, default is ok for Kivy-based app
-android.entrypoint = org.renpy.android.PythonActivity
+android.entrypoint = org.kivy.android.PythonActivity
 
 # (str) Android app theme, default is ok for Kivy-based app
 # android.apptheme = "@android:style/Theme.NoTitleBar"
