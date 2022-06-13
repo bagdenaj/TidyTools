@@ -39,9 +39,7 @@ if is_tag:
 elif is_pr:
     # Pull Request - prN (pr1)
     pr_number = env["GITHUB_REF"].split("/")[2]
-    filename = "-".join(
-        [*filename_split[:2], f"pr{pr_number}", *filename_split[2:]]
-    )
+    filename = "-".join([*filename_split[:2], f"pr{pr_number}", *filename_split[2:]])
     directory = os.path.join(directory, "prs")
     new_commit_message = (
         f'Add binary for #{pr_number} {commit_hash}: "{commit_subject}"'
@@ -81,18 +79,12 @@ for i in range(3):
     shutil.copy(binary_filename, os.path.join(directory, filename))
     # Push changes
     subprocess.check_call(["git", "add", os.path.join(directory, filename)])
-    subprocess.check_call(
-        ["git", "commit", "--amend", "-m", new_commit_message]
-    )
+    subprocess.check_call(["git", "commit", "--amend", "-m", new_commit_message])
     try:
-        subprocess.check_call(
-            ["git", "push", "origin", data_repository, "--force"]
-        )
+        subprocess.check_call(["git", "push", "origin", data_repository, "--force"])
     except subprocess.CalledProcessError:  # There are changes in repository
         # Undo local changes
-        subprocess.check_call(
-            ["git", "reset", f"origin/{data_repository}", "--hard"]
-        )
+        subprocess.check_call(["git", "reset", f"origin/{data_repository}", "--hard"])
         # Pull new changes
         subprocess.check_call(
             [

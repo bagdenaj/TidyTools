@@ -10,6 +10,7 @@ Kivy = "^2.1.0"
 kivymd = "^0.104.2"
 setuptools = "^62.3.3"
 pyjnius = "^1.4.1"
+pre-commit = "^2.19.0"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.10.1"
