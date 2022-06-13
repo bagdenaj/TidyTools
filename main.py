@@ -1,4 +1,4 @@
-from jnius import autoclass
+from jnius import autoclass, cast
 from kivy.lang import Builder
 from kivy.logger import Logger
 from kivy.uix.boxlayout import BoxLayout
@@ -101,7 +101,8 @@ def set_schedule(title):
     intent.putExtra(events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
     intent.setAction(intent.ACTION_INSERT)
     PythonActivity = autoclass("org.kivy.android.PythonActivity")
-    PythonActivity.mActivity.startActivity(intent)
+    currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
+    currentActivity.startActivity(intent)
 
 
 class ManufacturesSelect(Screen):
