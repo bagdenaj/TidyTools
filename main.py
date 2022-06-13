@@ -80,29 +80,32 @@ manufactures = ["Stihl", "Obi", "ABUS", "Bosch", "HYMER"]
 tools = ["Kettensäge", "Presslufthammer", "Schleifgerät", "Nagel"]
 
 
-def set_schedule(title):
-    Intent = autoclass("android.content.Intent")
-    Events = autoclass("android.provider.CalendarContract.Events")
-    Calendar = autoclass("android.provider.CalendarContract.Instance")
-    CalendarContract = autoclass("android.provider.CalendarContract")
-    begin_time = Calendar()
-    end_time = Calendar()
-    events = Events()
-    intent = Intent()
-    calendarcontract = CalendarContract()
-    begin_time.set(2022, 5, 12, 7, 30)
-    end_time.set(2022, 5, 12, 13, 30)
-    intent.setData(events.CONTENT_URI)
-    intent.putExtra(
-        calendarcontract.EXTRA_EVENT_BEGIN_TIME, begin_time.getTimeInMillis()
-    )
-    intent.putExtra(calendarcontract.EXTRA_EVENT_END_TIME, end_time.getTimeInMillis())
-    intent.putExtra(events.TITLE, title)
-    intent.putExtra(events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
-    intent.setAction(intent.ACTION_INSERT)
-    PythonActivity = autoclass("org.kivy.android.PythonActivity")
-    currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
-    currentActivity.startActivity(intent)
+def set_schedule(tool):
+    try:
+        Intent = autoclass("android.content.Intent")
+        intent = Intent()
+        CalendarContract = autoclass("android.provider.CalendarContract")
+        calendarcontract = CalendarContract()
+        begin_time = calendarcontract.EXTRA_EVENT_BEGIN_TIME
+        end_time = calendarcontract.EXTRA_EVENT_END_TIME
+        begin_time.set(2022, 5, 12, 7, 30)
+        end_time.set(2022, 5, 12, 13, 30)
+        intent.setData(calendarcontract.EVENTS_CONTENT_URI)
+        intent.putExtra("title", tool)
+        intent.putExtra("begin", begin_time)
+        intent.putExtra("end", end_time)
+        intent.putExtra("allDay", False)
+        intent.putExtra("description", "")
+        intent.putExtra("eventLocation", "")
+        intent.putExtra("availability", 0)
+        intent.putExtra("hasAlarm", 0)
+        intent.putExtra("rrule", "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+        intent.setAction(Intent.ACTION_INSERT)
+        PythonActivity = autoclass("org.kivy.android.PythonActivity")
+        currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
+        currentActivity.startActivity(intent)
+    except Exception as err:
+        Logger.exception(err)
 
 
 class ManufacturesSelect(Screen):
