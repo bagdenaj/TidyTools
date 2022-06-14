@@ -85,12 +85,11 @@ def set_schedule(tool):
         Intent = autoclass("android.content.Intent")
         intent = Intent()
         CalendarContract = autoclass("android.provider.CalendarContract")
-        calendarcontract = CalendarContract()
-        begin_time = calendarcontract.EXTRA_EVENT_BEGIN_TIME
-        end_time = calendarcontract.EXTRA_EVENT_END_TIME
+        begin_time = CalendarContract.EXTRA_EVENT_BEGIN_TIME
+        end_time = CalendarContract.EXTRA_EVENT_END_TIME
         begin_time.set(2022, 5, 12, 7, 30)
         end_time.set(2022, 5, 12, 13, 30)
-        intent.setData(calendarcontract.EVENTS_CONTENT_URI)
+        intent.setData(CalendarContract.EVENTS_CONTENT_URI)
         intent.putExtra("title", tool)
         intent.putExtra("begin", begin_time)
         intent.putExtra("end", end_time)
