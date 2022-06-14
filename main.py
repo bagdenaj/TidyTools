@@ -83,10 +83,13 @@ tools = ["Kettensäge", "Presslufthammer", "Schleifgerät", "Nagel"]
 def set_schedule(tool):
     try:
         Intent = autoclass("android.content.Intent")
-        intent = Intent()
+        Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
-        begin_time = CalendarContract.EXTRA_EVENT_BEGIN_TIME
-        end_time = CalendarContract.EXTRA_EVENT_END_TIME
+
+        # intent = Intent(CalendarContract.ACTION_INSERT)
+        intent = Intent()
+        begin_time = Calendar.getInstance()
+        end_time = Calendar.getInstance()
         begin_time.set(2022, 5, 12, 7, 30)
         end_time.set(2022, 5, 12, 13, 30)
         intent.setData(CalendarContract.EVENTS_CONTENT_URI)
