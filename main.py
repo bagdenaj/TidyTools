@@ -95,10 +95,10 @@ def set_schedule(tool):
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, tool)
         intent.putExtra(
-            CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin_time.getTimeInMillis()
+            CalendarContract.EXTRA_EVENT_BEGIN_TIME, float(begin_time.getTimeInMillis())
         )
         intent.putExtra(
-            CalendarContract.EXTRA_EVENT_END_TIME, end_time.getTimeInMillis()
+            CalendarContract.EXTRA_EVENT_END_TIME, float(end_time.getTimeInMillis())
         )
         # intent.putExtra("allDay", False)
         intent.putExtra(Events.DESCRIPTION, "Some description")
