@@ -104,7 +104,8 @@ def set_schedule(tool):
         intent.putExtra(Events.DESCRIPTION, "Some description")
         intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
         Logger.info(f"intent: {intent}")
-        Logger.info(f"intent: {intent.__dict__}")
+        Logger.info(f"intent uri: {intent.toUri(0).toString()}")
+        Logger.info(f"intent extra: {intent.getExtras()}")
         intent.setAction(Intent.ACTION_INSERT)
 
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
