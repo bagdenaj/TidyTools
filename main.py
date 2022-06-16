@@ -193,7 +193,8 @@ class ToolSelect(BoxLayout):
             CalendarContract = autoclass("android.provider.CalendarContract")
             Events = autoclass("android.provider.CalendarContract$Events")
             JS = autoclass("java.lang.String")
-            JI = autoclass("java.lang.Integer")
+            # JI = autoclass("java.lang.Integer")
+            JL = autoclass("java.lang.Long")
             self.intent = Intent()
 
             self.begin_time = Calendar.getInstance()
@@ -205,14 +206,26 @@ class ToolSelect(BoxLayout):
             self.intent.putExtra(Events.TITLE, JS(self.title))
             Logger.info(f"begin_time: {self.begin_time.getTimeInMillis()}")
             Logger.info(f"end_time: {self.end_time.getTimeInMillis()}")
-            self.intent.putExtra(
-                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                JI(self.begin_time.getTimeInMillis()),
-            )
-            self.intent.putExtra(
-                CalendarContract.EXTRA_EVENT_END_TIME,
-                JI(self.end_time.getTimeInMillis()),
-            )
+            try:
+                self.intent.putExtra(
+                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                    JL(self.begin_time.getTimeInMillis()),
+                )
+            except Exception:
+                self.intent.putExtra(
+                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                    float(self.begin_time.getTimeInMillis()),
+                )
+            try:
+                self.intent.putExtra(
+                    CalendarContract.EXTRA_EVENT_END_TIME,
+                    JL(self.end_time.getTimeInMillis()),
+                )
+            except Exception:
+                self.intent.putExtra(
+                    CalendarContract.EXTRA_EVENT_END_TIME,
+                    float(self.end_time.getTimeInMillis()),
+                )
             self.intent.putExtra(Events.DESCRIPTION, JS(self.description))
             self.intent.putExtra(Events.RRULE, JS(self.rrule))
             Logger.info(f"intent: {self.intent}")
