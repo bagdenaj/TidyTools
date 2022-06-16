@@ -201,15 +201,15 @@ class ToolSelect(BoxLayout):
 
             self.intent.setData(Events.CONTENT_URI)
             self.intent.putExtra(Events.TITLE, self.title)
-            Logger.info(f"begin_time: {self.begin_time.getTime()}")
-            Logger.info(f"end_time: {self.end_time.getTime()}")
+            Logger.info(f"begin_time: {self.begin_time.getTimeInMillis()}")
+            Logger.info(f"end_time: {self.end_time.getTimeInMillis()}")
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                self.begin_time.getTimeInMillis(),
+                float(self.begin_time.getTimeInMillis()),
             )
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_END_TIME,
-                self.end_time.getTimeInMillis(),
+                float(self.end_time.getTimeInMillis()),
             )
             self.intent.putExtra(Events.DESCRIPTION, self.description)
             self.intent.putExtra(Events.RRULE, self.rrule)
