@@ -99,17 +99,19 @@ def set_schedule(self, tool):
         Logger.info(f"end_time: {self.end_time.getTime()}")
         self.intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            float(self.begin_time.getTimeInMillis()),
+            self.begin_time.getTimeInMillis(),
         )
         self.intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            float(self.end_time.getTimeInMillis()),
+            self.end_time.getTimeInMillis(),
         )
         self.intent.putExtra(Events.DESCRIPTION, "Some description")
         self.intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
         Logger.info(f"intent: {self.intent}")
         Logger.info(f"intent uri: {self.intent.toUri(0)}")
-        Logger.info(f"intent extra: {self.intent.getExtras()}")
+        Logger.info(f"intent extra: {self.intent.getStringArrayListExtra()}")
+        Logger.info(f"intent.getExtra('title'): {self.intent.getStringExtra('title')}")
+        Logger.info(f"intent.getExtra('rrule'): {self.intent.getStringExtra('rrule')}")
         self.intent.setAction(Intent.ACTION_INSERT)
 
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
