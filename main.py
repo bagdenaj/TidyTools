@@ -99,11 +99,11 @@ def set_schedule(self, tool):
         Logger.info(f"end_time: {self.end_time.getTime()}")
         self.intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            self.begin_time.getTimeInMillis(),
+            self.begin_time,
         )
         self.intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            self.end_time.getTimeInMillis(),
+            self.end_time,
         )
         self.intent.putExtra(Events.DESCRIPTION, "Some description")
         self.intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
