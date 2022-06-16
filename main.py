@@ -183,6 +183,10 @@ class ToolSelect(BoxLayout):
         super(ToolSelect, self).__init__(**kwargs)
 
     def set_schedule(self, tool):
+        self.title = tool
+        self.rrule = "FREQ=WEEKLY;BYDAY=MO;COUNT=3"
+        self.description = "Some description"
+
         try:
             Intent = autoclass("android.content.Intent")
             Calendar = autoclass("java.util.Calendar")
@@ -196,25 +200,25 @@ class ToolSelect(BoxLayout):
             self.end_time.set(2022, 5, 13, 13, 30)
 
             self.intent.setData(Events.CONTENT_URI)
-            self.intent.putExtra(Events.TITLE, tool)
+            self.intent.putExtra(Events.TITLE, self.title)
             Logger.info(f"begin_time: {self.begin_time.getTime()}")
             Logger.info(f"end_time: {self.end_time.getTime()}")
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                str(self.begin_time.getTimeInMillis()),
+                self.begin_time.getTimeInMillis(),
             )
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_END_TIME,
-                str(self.end_time.getTimeInMillis()),
+                self.end_time.getTimeInMillis(),
             )
-            self.intent.putExtra(Events.DESCRIPTION, "Some description")
-            self.intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+            self.intent.putExtra(Events.DESCRIPTION, self.description)
+            self.intent.putExtra(Events.RRULE, self.rrule)
             Logger.info(f"intent: {self.intent}")
             Logger.info(f"intent uri: {self.intent.toUri(0)}")
             try:
                 Logger.info(
                     f"intent extra: "
-                    f"{self.intent.getStringArrayListExtra('description')}"
+                    f"{self.intent.getStringArrayListExtra(Events.DESCRIPTION)}"
                 )
             except Exception:
                 pass
@@ -228,10 +232,12 @@ class ToolSelect(BoxLayout):
                     f"{self.intent.getExtra(CalendarContract.EXTRA_EVENT_END_TIME)}"
                 )
                 Logger.info(
-                    f"intent.getExtra('title'): {self.intent.getStringExtra('title')}"
+                    f"intent.getExtra('title'): "
+                    f"{self.intent.getStringExtra(Events.TITLE)}"
                 )
                 Logger.info(
-                    f"intent.getExtra('rrule'): {self.intent.getStringExtra('rrule')}"
+                    f"intent.getExtra('rrule'): "
+                    f"{self.intent.getStringExtra(Events.RRULE)}"
                 )
             except Exception:
                 pass
@@ -245,6 +251,9 @@ class ToolSelect(BoxLayout):
             self.intent = None
             self.begin_time = None
             self.end_time = None
+            self.title = None
+            self.rrule = None
+            self.description = None
         except Exception as err:
             Logger.exception(err)
 
