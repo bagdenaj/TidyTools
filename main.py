@@ -192,6 +192,7 @@ class ToolSelect(BoxLayout):
             Calendar = autoclass("java.util.Calendar")
             CalendarContract = autoclass("android.provider.CalendarContract")
             Events = autoclass("android.provider.CalendarContract$Events")
+            JS = autoclass("java.lang.String")
             self.intent = Intent()
 
             self.begin_time = Calendar.getInstance()
@@ -200,19 +201,19 @@ class ToolSelect(BoxLayout):
             self.end_time.set(2022, 5, 13, 13, 30)
 
             self.intent.setData(Events.CONTENT_URI)
-            self.intent.putExtra(Events.TITLE, self.title)
+            self.intent.putExtra(Events.TITLE, JS(self.title))
             Logger.info(f"begin_time: {self.begin_time.getTimeInMillis()}")
             Logger.info(f"end_time: {self.end_time.getTimeInMillis()}")
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                float(self.begin_time.getTimeInMillis()),
+                int(self.begin_time.getTimeInMillis()),
             )
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_END_TIME,
-                float(self.end_time.getTimeInMillis()),
+                int(self.end_time.getTimeInMillis()),
             )
-            self.intent.putExtra(Events.DESCRIPTION, self.description)
-            self.intent.putExtra(Events.RRULE, self.rrule)
+            self.intent.putExtra(Events.DESCRIPTION, JS(self.description))
+            self.intent.putExtra(Events.RRULE, JS(self.rrule))
             Logger.info(f"intent: {self.intent}")
             Logger.info(f"intent uri: {self.intent.toUri(0)}")
             try:
