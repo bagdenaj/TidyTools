@@ -109,7 +109,7 @@ def set_schedule(self, tool):
         self.intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
         Logger.info(f"intent: {self.intent}")
         Logger.info(f"intent uri: {self.intent.toUri(0)}")
-        Logger.info(f"intent extra: {self.intent.getStringArrayListExtra()}")
+        Logger.info(f"intent extra: {self.intent.getStringArrayListExtra(self.intent)}")
         Logger.info(f"intent.getExtra('title'): {self.intent.getStringExtra('title')}")
         Logger.info(f"intent.getExtra('rrule'): {self.intent.getStringExtra('rrule')}")
         self.intent.setAction(Intent.ACTION_INSERT)
