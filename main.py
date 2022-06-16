@@ -193,7 +193,7 @@ class ToolSelect(BoxLayout):
             CalendarContract = autoclass("android.provider.CalendarContract")
             Events = autoclass("android.provider.CalendarContract$Events")
             JS = autoclass("java.lang.String")
-            JI = autoclass("java.long.Integer")
+            JI = autoclass("java.lang.Integer")
             self.intent = Intent()
 
             self.begin_time = Calendar.getInstance()
