@@ -80,37 +80,46 @@ manufactures = ["Stihl", "Obi", "ABUS", "Bosch", "HYMER"]
 tools = ["Kettensäge", "Presslufthammer", "Schleifgerät", "Nagel"]
 
 
-def set_schedule(tool):
+def set_schedule(self, tool):
     try:
         Intent = autoclass("android.content.Intent")
         Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
-        intent = Intent()
+        self.intent = Intent()
 
-        begin_time = Calendar.getInstance()
-        end_time = Calendar.getInstance()
-        begin_time.set(2022, 5, 13, 7, 30)
-        end_time.set(2022, 5, 13, 13, 30)
+        self.begin_time = Calendar.getInstance()
+        self.end_time = Calendar.getInstance()
+        self.begin_time.set(2022, 5, 13, 7, 30)
+        self.end_time.set(2022, 5, 13, 13, 30)
 
-        intent.setData(Events.CONTENT_URI)
-        intent.putExtra(Events.TITLE, tool)
-        intent.putExtra(
-            CalendarContract.EXTRA_EVENT_BEGIN_TIME, float(begin_time.getTimeInMillis())
+        self.intent.setData(Events.CONTENT_URI)
+        self.intent.putExtra(Events.TITLE, tool)
+        Logger.info(f"begin_time: {self.begin_time.getTime()}")
+        Logger.info(f"end_time: {self.end_time.getTime()}")
+        self.intent.putExtra(
+            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            float(self.begin_time.getTimeInMillis()),
         )
-        intent.putExtra(
-            CalendarContract.EXTRA_EVENT_END_TIME, float(end_time.getTimeInMillis())
+        self.intent.putExtra(
+            CalendarContract.EXTRA_EVENT_END_TIME,
+            float(self.end_time.getTimeInMillis()),
         )
-        intent.putExtra(Events.DESCRIPTION, "Some description")
-        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
-        Logger.info(f"intent: {intent}")
-        Logger.info(f"intent uri: {intent.toUri(0)}")
-        Logger.info(f"intent extra: {intent.getExtras()}")
-        intent.setAction(Intent.ACTION_INSERT)
+        self.intent.putExtra(Events.DESCRIPTION, "Some description")
+        self.intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+        Logger.info(f"intent: {self.intent}")
+        Logger.info(f"intent uri: {self.intent.toUri(0)}")
+        Logger.info(f"intent extra: {self.intent.getExtras()}")
+        self.intent.setAction(Intent.ACTION_INSERT)
 
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
         currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
-        currentActivity.startActivity(intent)
+        currentActivity.startActivity(self.intent)
+
+        # Tell the Python garbage collector this will not be reused
+        self.intent = None
+        self.begin_time = None
+        self.end_time = None
     except Exception as err:
         Logger.exception(err)
 
@@ -156,7 +165,7 @@ class ToolSelect(BoxLayout):
             self.ids.tools.clear_widgets()
             self.ids.search_tool.text = value.text + " "
             # need to somehow disable set_list() after here
-            set_schedule(value.text)
+            set_schedule(self, value.text)
         except Exception as err:
             Logger.exception(err)
 
