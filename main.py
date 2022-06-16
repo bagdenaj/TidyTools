@@ -193,7 +193,6 @@ class ToolSelect(BoxLayout):
             CalendarContract = autoclass("android.provider.CalendarContract")
             Events = autoclass("android.provider.CalendarContract$Events")
             JS = autoclass("java.lang.String")
-            Long = autoclass("java.lang.Long")
             self.intent = Intent()
 
             self.begin_time = Calendar.getInstance()
@@ -207,11 +206,11 @@ class ToolSelect(BoxLayout):
             Logger.info(f"end_time: {self.end_time.getTimeInMillis()}")
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                Long(self.begin_time.getTimeInMillis()),
+                JS(self.begin_time.getTimeInMillis()),
             )
             self.intent.putExtra(
                 CalendarContract.EXTRA_EVENT_END_TIME,
-                Long(self.end_time.getTimeInMillis()),
+                JS(self.end_time.getTimeInMillis()),
             )
             self.intent.putExtra(Events.DESCRIPTION, JS(self.description))
             self.intent.putExtra(Events.RRULE, JS(self.rrule))
