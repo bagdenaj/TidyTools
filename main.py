@@ -207,7 +207,7 @@ class ToolSelect(BoxLayout):
                 CalendarContract.EXTRA_EVENT_END_TIME,
                 str(self.end_time.getTimeInMillis()),
             )
-            self.intent.putExtra(Events.Description, "Some description")
+            self.intent.putExtra(Events.DESCRIPTION, "Some description")
             self.intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
             Logger.info(f"intent: {self.intent}")
             Logger.info(f"intent uri: {self.intent.toUri(0)}")
