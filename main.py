@@ -139,11 +139,20 @@ def set_schedule(tool):
                             )
                             Logger.info("JF(begin_time.getTimeInMillis()).longValue()")
                         except Exception as err:
-                            Logger.info(f"JF().longValue(): {err}")
-                            intent.putExtra(
-                                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                float(begin_time.getTimeInMillis()),
-                            )
+                            try:
+                                Logger.info(f"JF().longValue(): {err}")
+                                intent.putExtra(
+                                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                    JL(str(begin_time.getTimeInMillis())),
+                                )
+                            except Exception as err:
+                                Logger.info(f"JL(str()): {err}")
+                                intent.putExtra(
+                                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                    cast(
+                                        "java.lang.Long", begin_time.getTimeInMillis()
+                                    ),
+                                )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
             JL(float(end_time.getTimeInMillis())),
