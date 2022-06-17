@@ -87,7 +87,7 @@ def set_schedule(tool):
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
-        JF = autoclass("java.lang.Float")
+        # JF = autoclass("java.lang.Float")
         # JL = autoclass("java.lang.Long")
         intent = Intent()
 
@@ -103,11 +103,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            JF(float(begin_time.getTimeInMillis())),
+            JS(float(begin_time.getTimeInMillis())),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JF(float(end_time.getTimeInMillis())),
+            JS(float(end_time.getTimeInMillis())),
         )
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
         intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
