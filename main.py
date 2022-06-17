@@ -87,8 +87,8 @@ def set_schedule(tool):
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
-        # JF = autoclass("java.lang.Float")
-        # JL = autoclass("java.lang.Long")
+        JF = autoclass("java.lang.Float")
+        JL = autoclass("java.lang.Long")
         intent = Intent()
 
         begin_time = Calendar.getInstance()
@@ -100,14 +100,34 @@ def set_schedule(tool):
         intent.putExtra(Events.TITLE, JS(tool))
         Logger.info(f"begin_time: {begin_time.getTimeInMillis()}")
         Logger.info(f"end_time: {end_time.getTimeInMillis()}")
-
-        intent.putExtra(
-            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            JS(float(begin_time.getTimeInMillis())),
-        )
+        try:
+            intent.putExtra(
+                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                JL(float(begin_time.getTimeInMillis())),
+            )
+        except Exception:
+            try:
+                Logger.info("JL(begin_time.getTimeInMillis())")
+                intent.putExtra(
+                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                    JL(begin_time.getTimeInMillis()),
+                )
+            except Exception:
+                try:
+                    Logger.info("JL(int(begin_time.getTimeInMillis()))")
+                    intent.putExtra(
+                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        JL(int(begin_time.getTimeInMillis())),
+                    )
+                except Exception:
+                    Logger.info("JL(JF(begin_time.getTimeInMillis()))")
+                    intent.putExtra(
+                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        JL(JF(begin_time.getTimeInMillis())),
+                    )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JS(float(end_time.getTimeInMillis())),
+            JL(float(end_time.getTimeInMillis())),
         )
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
         intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
