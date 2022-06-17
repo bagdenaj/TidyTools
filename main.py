@@ -80,70 +80,55 @@ manufactures = ["Stihl", "Obi", "ABUS", "Bosch", "HYMER"]
 tools = ["Kettensäge", "Presslufthammer", "Schleifgerät", "Nagel"]
 
 
-# def set_schedule(self, tool):
-#     try:
-#         Intent = autoclass("android.content.Intent")
-#         Calendar = autoclass("java.util.Calendar")
-#         CalendarContract = autoclass("android.provider.CalendarContract")
-#         Events = autoclass("android.provider.CalendarContract$Events")
-#         self.intent = Intent()
+def set_schedule(tool):
+    try:
+        Intent = autoclass("android.content.Intent")
+        Calendar = autoclass("java.util.Calendar")
+        CalendarContract = autoclass("android.provider.CalendarContract")
+        Events = autoclass("android.provider.CalendarContract$Events")
+        JS = autoclass("java.lang.String")
+        # JI = autoclass("java.lang.Integer")
+        JL = autoclass("java.lang.Long")
+        intent = Intent()
 
-#         self.begin_time = Calendar.getInstance()
-#         self.end_time = Calendar.getInstance()
-#         self.begin_time.set(2022, 5, 13, 7, 30)
-#         self.end_time.set(2022, 5, 13, 13, 30)
+        begin_time = Calendar.getInstance()
+        end_time = Calendar.getInstance()
+        begin_time.set(2022, 5, 12, 7, 30)
+        end_time.set(2022, 5, 12, 13, 30)
 
-#         self.intent.setData(Events.CONTENT_URI)
-#         self.intent.putExtra(Events.TITLE, tool)
-#         Logger.info(f"begin_time: {self.begin_time.getTime()}")
-#         Logger.info(f"end_time: {self.end_time.getTime()}")
-#         self.intent.putExtra(
-#             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-#             str(self.begin_time.getTimeInMillis()),
-#         )
-#         self.intent.putExtra(
-#             CalendarContract.EXTRA_EVENT_END_TIME,
-#             str(self.end_time.getTimeInMillis()),
-#         )
-#         self.intent.putExtra("description", "Some description")
-#         self.intent.putExtra("rrule", "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
-#         Logger.info(f"intent: {self.intent}")
-#         Logger.info(f"intent uri: {self.intent.toUri(0)}")
-#         try:
-#             Logger.info(
-#                 f"intent extra: {self.intent.getStringArrayListExtra('description')}"
-#             )
-#         except Exception:
-#             pass
-#         try:
-#             Logger.info(
-#                 f"intent.getExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME): "
-#                 f"{self.intent.getExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME)}"
-#             )
-#             Logger.info(
-#                 f"intent.getExtra(CalendarContract.EXTRA_EVENT_END_TIME): "
-#                 f"{self.intent.getExtra(CalendarContract.EXTRA_EVENT_END_TIME)}"
-#             )
-#             Logger.info(
-#                 f"intent.getExtra('title'): {self.intent.getStringExtra('title')}"
-#             )
-#             Logger.info(
-#                 f"intent.getExtra('rrule'): {self.intent.getStringExtra('rrule')}"
-#             )
-#         except Exception:
-#             pass
-#         self.intent.setAction(Intent.ACTION_INSERT)
+        intent.setData(Events.CONTENT_URI)
+        intent.putExtra(Events.TITLE, JS(tool))
+        Logger.info(f"begin_time: {begin_time.getTimeInMillis()}")
+        Logger.info(f"end_time: {end_time.getTimeInMillis()}")
+        try:
+            intent.putExtra(
+                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                JL(int(begin_time.getTimeInMillis())),
+            )
+        except Exception:
+            intent.putExtra(
+                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                float(begin_time.getTimeInMillis()),
+            )
+        try:
+            intent.putExtra(
+                CalendarContract.EXTRA_EVENT_END_TIME,
+                JL(int(end_time.getTimeInMillis())),
+            )
+        except Exception:
+            intent.putExtra(
+                CalendarContract.EXTRA_EVENT_END_TIME,
+                float(end_time.getTimeInMillis()),
+            )
+        intent.putExtra(Events.DESCRIPTION, JS("Some description"))
+        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
+        intent.setAction(Intent.ACTION_INSERT)
 
-#         PythonActivity = autoclass("org.kivy.android.PythonActivity")
-#         currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
-#         currentActivity.startActivity(self.intent)
-
-#         # Tell the Python garbage collector this will not be reused
-#         self.intent = None
-#         self.begin_time = None
-#         self.end_time = None
-#     except Exception as err:
-#         Logger.exception(err)
+        PythonActivity = autoclass("org.kivy.android.PythonActivity")
+        currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
+        currentActivity.startActivity(intent)
+    except Exception as err:
+        Logger.exception(err)
 
 
 class ManufacturesSelect(Screen):
@@ -182,103 +167,13 @@ class ToolSelect(BoxLayout):
     def __init__(self, **kwargs) -> None:
         super(ToolSelect, self).__init__(**kwargs)
 
-    def set_schedule(self, tool):
-        self.title = tool
-        self.rrule = "FREQ=WEEKLY;BYDAY=MO;COUNT=3"
-        self.description = "Some description"
-
-        try:
-            Intent = autoclass("android.content.Intent")
-            Calendar = autoclass("java.util.Calendar")
-            CalendarContract = autoclass("android.provider.CalendarContract")
-            Events = autoclass("android.provider.CalendarContract$Events")
-            JS = autoclass("java.lang.String")
-            # JI = autoclass("java.lang.Integer")
-            JL = autoclass("java.lang.Long")
-            self.intent = Intent()
-
-            self.begin_time = Calendar.getInstance()
-            self.end_time = Calendar.getInstance()
-            self.begin_time.set(2022, 5, 13, 7, 30)
-            self.end_time.set(2022, 5, 13, 13, 30)
-
-            self.intent.setData(Events.CONTENT_URI)
-            self.intent.putExtra(Events.TITLE, JS(self.title))
-            Logger.info(f"begin_time: {self.begin_time.getTimeInMillis()}")
-            Logger.info(f"end_time: {self.end_time.getTimeInMillis()}")
-            try:
-                self.intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                    JL(self.begin_time.getTimeInMillis()),
-                )
-            except Exception:
-                self.intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                    float(self.begin_time.getTimeInMillis()),
-                )
-            try:
-                self.intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_END_TIME,
-                    JL(self.end_time.getTimeInMillis()),
-                )
-            except Exception:
-                self.intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_END_TIME,
-                    float(self.end_time.getTimeInMillis()),
-                )
-            self.intent.putExtra(Events.DESCRIPTION, JS(self.description))
-            self.intent.putExtra(Events.RRULE, JS(self.rrule))
-            Logger.info(f"intent: {self.intent}")
-            Logger.info(f"intent uri: {self.intent.toUri(0)}")
-            try:
-                Logger.info(
-                    f"intent extra: "
-                    f"{self.intent.getStringArrayListExtra(Events.DESCRIPTION)}"
-                )
-            except Exception:
-                pass
-            try:
-                Logger.info(
-                    f"intent.getExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME): "
-                    f"{self.intent.getExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME)}"
-                )
-                Logger.info(
-                    f"intent.getExtra(CalendarContract.EXTRA_EVENT_END_TIME): "
-                    f"{self.intent.getExtra(CalendarContract.EXTRA_EVENT_END_TIME)}"
-                )
-                Logger.info(
-                    f"intent.getExtra('title'): "
-                    f"{self.intent.getStringExtra(Events.TITLE)}"
-                )
-                Logger.info(
-                    f"intent.getExtra('rrule'): "
-                    f"{self.intent.getStringExtra(Events.RRULE)}"
-                )
-            except Exception:
-                pass
-            self.intent.setAction(Intent.ACTION_INSERT)
-
-            PythonActivity = autoclass("org.kivy.android.PythonActivity")
-            currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
-            currentActivity.startActivity(self.intent)
-
-            # Tell the Python garbage collector this will not be reused
-            self.intent = None
-            self.begin_time = None
-            self.end_time = None
-            self.title = None
-            self.rrule = None
-            self.description = None
-        except Exception as err:
-            Logger.exception(err)
-
     def pressed(self, value):
         try:
             self.ids.tools.clear_widgets()
             self.ids.search_tool.text = value.text + " "
             # need to somehow disable set_list() after here
             Logger.info(value.text)
-            self.set_schedule(value.text)
+            set_schedule(value.text)
         except Exception as err:
             Logger.exception(err)
 
