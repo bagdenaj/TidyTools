@@ -86,9 +86,9 @@ def set_schedule(tool):
         Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
-        JS = autoclass("java.lang.String")
-        JF = autoclass("java.lang.Float")
-        JL = autoclass("java.lang.Long")
+        # JS = autoclass("java.lang.String")
+        # JF = autoclass("java.lang.Float")
+        # JL = autoclass("java.lang.Long")
         intent = Intent()
 
         begin_time = Calendar.getInstance()
@@ -97,68 +97,20 @@ def set_schedule(tool):
         end_time.set(2022, 5, 12, 13, 30)
 
         intent.setData(Events.CONTENT_URI)
-        intent.putExtra(Events.TITLE, JS(tool))
+        intent.putExtra(Events.TITLE, tool)
         Logger.info(f"begin_time: {begin_time.getTimeInMillis()}")
         Logger.info(f"end_time: {end_time.getTimeInMillis()}")
-        try:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                JL(float(begin_time.getTimeInMillis())),
-            )
-            Logger.info("JL(float(begin_time.getTimeInMillis()))")
-        except Exception as err:
-            try:
-                Logger.info(f"JL(float(): {err}")
-                intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                    JL(begin_time.getTimeInMillis()),
-                )
-                Logger.info("JL(begin_time.getTimeInMillis())")
-            except Exception as err:
-                try:
-                    Logger.info(f"JL(): {err}")
-                    intent.putExtra(
-                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                        JL(int(begin_time.getTimeInMillis())),
-                    )
-                    Logger.info("JL(int(begin_time.getTimeInMillis()))")
-                except Exception as err:
-                    try:
-                        Logger.info(f"JL(int(): {err}")
-                        intent.putExtra(
-                            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                            JL(JF(begin_time.getTimeInMillis()).longValue()),
-                        )
-                        Logger.info("JL(JF(begin_time.getTimeInMillis()).longValue())")
-                    except Exception as err:
-                        try:
-                            Logger.info(f"JL(JF().longValue()): {err}")
-                            intent.putExtra(
-                                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                JL(JF(begin_time.getTimeInMillis()).longValue()),
-                            )
-                            Logger.info("JF(begin_time.getTimeInMillis()).longValue()")
-                        except Exception as err:
-                            try:
-                                Logger.info(f"JF().longValue(): {err}")
-                                intent.putExtra(
-                                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                    JL(str(begin_time.getTimeInMillis())),
-                                )
-                            except Exception as err:
-                                Logger.info(f"JL(str()): {err}")
-                                intent.putExtra(
-                                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                    cast(
-                                        "java.lang.Long", begin_time.getTimeInMillis()
-                                    ),
-                                )
+
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            begin_time.getTimeInMillis(),
+        )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JL(float(end_time.getTimeInMillis())),
+            end_time.getTimeInMillis(),
         )
-        intent.putExtra(Events.DESCRIPTION, JS("Some description"))
-        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
+        intent.putExtra(Events.DESCRIPTION, "Some description")
+        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
         intent.setAction(Intent.ACTION_INSERT)
 
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
