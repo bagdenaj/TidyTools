@@ -105,26 +105,45 @@ def set_schedule(tool):
                 CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                 JL(float(begin_time.getTimeInMillis())),
             )
-        except Exception:
+            Logger.info("JL(float(begin_time.getTimeInMillis()))")
+        except Exception as err:
             try:
+                Logger.info(f"JL(float(): {err}")
                 intent.putExtra(
                     CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                     JL(begin_time.getTimeInMillis()),
                 )
                 Logger.info("JL(begin_time.getTimeInMillis())")
-            except Exception:
+            except Exception as err:
                 try:
+                    Logger.info(f"JL(): {err}")
                     intent.putExtra(
                         CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                         JL(int(begin_time.getTimeInMillis())),
                     )
                     Logger.info("JL(int(begin_time.getTimeInMillis()))")
-                except Exception:
-                    intent.putExtra(
-                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                        JL(JF(begin_time.getTimeInMillis())),
-                    )
-                    Logger.info("JL(JF(begin_time.getTimeInMillis()))")
+                except Exception as err:
+                    try:
+                        Logger.info(f"JL(int(): {err}")
+                        intent.putExtra(
+                            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                            JL(JF(begin_time.getTimeInMillis()).longValue()),
+                        )
+                        Logger.info("JL(JF(begin_time.getTimeInMillis()).longValue())")
+                    except Exception as err:
+                        try:
+                            Logger.info(f"JL(JF().longValue()): {err}")
+                            intent.putExtra(
+                                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                JL(JF(begin_time.getTimeInMillis()).longValue()),
+                            )
+                            Logger.info("JF(begin_time.getTimeInMillis()).longValue()")
+                        except Exception as err:
+                            Logger.info(f"JF().longValue(): {err}")
+                            intent.putExtra(
+                                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                                float(begin_time.getTimeInMillis()),
+                            )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
             JL(float(end_time.getTimeInMillis())),
