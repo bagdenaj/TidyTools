@@ -107,24 +107,24 @@ def set_schedule(tool):
             )
         except Exception:
             try:
-                Logger.info("JL(begin_time.getTimeInMillis())")
                 intent.putExtra(
                     CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                     JL(begin_time.getTimeInMillis()),
                 )
+                Logger.info("JL(begin_time.getTimeInMillis())")
             except Exception:
                 try:
-                    Logger.info("JL(int(begin_time.getTimeInMillis()))")
                     intent.putExtra(
                         CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                         JL(int(begin_time.getTimeInMillis())),
                     )
+                    Logger.info("JL(int(begin_time.getTimeInMillis()))")
                 except Exception:
-                    Logger.info("JL(JF(begin_time.getTimeInMillis()))")
                     intent.putExtra(
                         CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                         JL(JF(begin_time.getTimeInMillis())),
                     )
+                    Logger.info("JL(JF(begin_time.getTimeInMillis()))")
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
             JL(float(end_time.getTimeInMillis())),
