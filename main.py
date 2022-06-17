@@ -87,7 +87,7 @@ def set_schedule(tool):
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
-        JF = autoclass("java.lang.Float")
+        # JF = autoclass("java.lang.Float")
         # JL = autoclass("java.lang.Long")
         intent = Intent()
 
@@ -100,26 +100,15 @@ def set_schedule(tool):
         intent.putExtra(Events.TITLE, JS(tool))
         Logger.info(f"begin_time: {begin_time.getTimeInMillis()}")
         Logger.info(f"end_time: {end_time.getTimeInMillis()}")
-        try:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                JF(int(begin_time.getTimeInMillis())),
-            )
-        except Exception:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                float(begin_time.getTimeInMillis()),
-            )
-        try:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_END_TIME,
-                JF(int(end_time.getTimeInMillis())),
-            )
-        except Exception:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_END_TIME,
-                float(end_time.getTimeInMillis()),
-            )
+
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            begin_time.getTimeInMillis().longValue(),
+        )
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_END_TIME,
+            end_time.getTimeInMillis().longValue(),
+        )
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
         intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
         intent.setAction(Intent.ACTION_INSERT)
