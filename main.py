@@ -88,7 +88,7 @@ def set_schedule(tool):
         # Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
-        # JS = autoclass("java.lang.String")
+        JS = autoclass("java.lang.String")
         # JF = autoclass("java.lang.Float")
         # JL = autoclass("java.lang.Long")
         intent = Intent()
@@ -99,21 +99,23 @@ def set_schedule(tool):
         # end_time.set(2022, 5, 12, 13, 30)
 
         intent.setData(Events.CONTENT_URI)
-        intent.putExtra(Events.TITLE, tool)
+        intent.putExtra(Events.TITLE, JS(tool))
         # Logger.info(f"begin_time: {begin_time.getTimeInMillis()}")
         # Logger.info(f"end_time: {end_time.getTimeInMillis()}")
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            time.time() * 1000,
+            JS(time.time() * 1000),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            time.time() * 1000 + 10800000,  # adds 3 hours
+            JS(time.time() * 1000 + 10800000),  # adds 3 hours
         )
-        intent.putExtra(Events.DESCRIPTION, "Some description")
-        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+        intent.putExtra(Events.DESCRIPTION, JS("Some description"))
+        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
         intent.setAction(Intent.ACTION_INSERT)
+
+        Logger.info(f"intent: {intent}")
 
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
         currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
