@@ -105,11 +105,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            int(begin_time),
+            cast("java.lang.Long", int(begin_time)),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            int(end_time),
+            cast("java.lang.Long", int(end_time)),
         )
         intent.putExtra(Events.DESCRIPTION, "Some description")
         intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
