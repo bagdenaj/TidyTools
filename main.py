@@ -1,3 +1,5 @@
+import time
+
 from jnius import autoclass, cast
 from kivy.lang import Builder
 from kivy.logger import Logger
@@ -83,31 +85,31 @@ tools = ["Kettensäge", "Presslufthammer", "Schleifgerät", "Nagel"]
 def set_schedule(tool):
     try:
         Intent = autoclass("android.content.Intent")
-        Calendar = autoclass("java.util.Calendar")
+        # Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         # JS = autoclass("java.lang.String")
         # JF = autoclass("java.lang.Float")
-        JL = autoclass("java.lang.Long")
+        # JL = autoclass("java.lang.Long")
         intent = Intent()
 
-        begin_time = Calendar.getInstance()
-        end_time = Calendar.getInstance()
-        begin_time.set(2022, 5, 12, 7, 30)
-        end_time.set(2022, 5, 12, 13, 30)
+        # begin_time = Calendar.getInstance()
+        # end_time = Calendar.getInstance()
+        # begin_time.set(2022, 5, 12, 7, 30)
+        # end_time.set(2022, 5, 12, 13, 30)
 
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, tool)
-        Logger.info(f"begin_time: {begin_time.getTimeInMillis()}")
-        Logger.info(f"end_time: {end_time.getTimeInMillis()}")
+        # Logger.info(f"begin_time: {begin_time.getTimeInMillis()}")
+        # Logger.info(f"end_time: {end_time.getTimeInMillis()}")
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            JL(begin_time.getTimeInMillis()),
+            time.time() * 1000,
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JL(end_time.getTimeInMillis()),
+            time.time() * 1000 + 10800000,  # adds 3 hours
         )
         intent.putExtra(Events.DESCRIPTION, "Some description")
         intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
