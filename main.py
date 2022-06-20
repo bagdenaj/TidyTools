@@ -89,14 +89,14 @@ def set_schedule(tool):
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         # JS = autoclass("java.lang.String")
-        JI = autoclass("java.lang.Integer")
-        JL = autoclass("java.lang.Long")
+        # JI = autoclass("java.lang.Integer")
+        # JL = autoclass("java.lang.Long")
         intent = Intent()
 
         # begin_time = Calendar.getInstance()
         # end_time = Calendar.getInstance()
-        begin_time = time.time() * 1000
-        end_time = time.time() * 1000 + 10800000  # adds 3 hours
+        begin_time = int(time.time() * 1000)
+        end_time = int(time.time() * 1000 + 10800000)  # adds 3 hours
 
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, tool)
@@ -106,25 +106,25 @@ def set_schedule(tool):
         try:
             intent.putExtra(
                 CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                cast("java.lang.String", JL(int(begin_time))),
+                cast("java.lang.String", str(begin_time)),
             )
             intent.putExtra(
                 CalendarContract.EXTRA_EVENT_END_TIME,
-                cast("java.lang.String", JL(int(end_time))),
+                cast("java.lang.String", str(end_time)),
             )
-            Logger.info("cast('java.lang.String', JL(int(end_time))) succesfull!")
+            Logger.info("cast('java.lang.String', str(end_time)) succesfull!")
         except Exception as err:
             try:
                 Logger.info(err)
                 intent.putExtra(
                     CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                    cast("java.lang.Long", JI(int(begin_time))),
+                    str(begin_time),
                 )
                 intent.putExtra(
                     CalendarContract.EXTRA_EVENT_END_TIME,
-                    cast("java.lang.Long", JI(int(end_time))),
+                    str(end_time),
                 )
-                Logger.info("cast('java.lang.Long', JF(int(end_time))) succesfull!")
+                Logger.info("str(end_time) succesfull!")
             except Exception as err:
                 Logger.info(err)
                 intent.putExtra(
