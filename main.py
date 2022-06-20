@@ -1,5 +1,3 @@
-import time
-
 from jnius import autoclass, cast
 from kivy.lang import Builder
 from kivy.logger import Logger
@@ -85,60 +83,35 @@ tools = ["Kettensäge", "Presslufthammer", "Schleifgerät", "Nagel"]
 def set_schedule(tool):
     try:
         Intent = autoclass("android.content.Intent")
-        # Calendar = autoclass("java.util.Calendar")
+        Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
-        # JS = autoclass("java.lang.String")
+        JS = autoclass("java.lang.String")
         # JI = autoclass("java.lang.Integer")
         # JL = autoclass("java.lang.Long")
         intent = Intent()
 
-        # begin_time = Calendar.getInstance()
-        # end_time = Calendar.getInstance()
-        begin_time = int(time.time() * 1000)
-        end_time = int(time.time() * 1000 + 10800000)  # adds 3 hours
+        begin_time = Calendar.getInstance()
+        end_time = Calendar.getInstance()
+        begin_time.set(2022, 5, 12, 7, 30)
+        end_time.set(2022, 5, 12, 13, 30)
 
         intent.setData(Events.CONTENT_URI)
-        intent.putExtra(Events.TITLE, tool)
+        intent.putExtra(Events.TITLE, JS(tool))
         Logger.info(f"begin_time: {begin_time}")
         Logger.info(f"end_time: {end_time}")
 
-        try:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                cast("java.lang.String", str(begin_time)),
-            )
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_END_TIME,
-                cast("java.lang.String", str(end_time)),
-            )
-            Logger.info("cast('java.lang.String', str(end_time)) succesfull!")
-        except Exception as err:
-            try:
-                Logger.info(err)
-                intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                    str(begin_time),
-                )
-                intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_END_TIME,
-                    str(end_time),
-                )
-                Logger.info("str(end_time) succesfull!")
-            except Exception as err:
-                Logger.info(err)
-                intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                    cast("java.lang.Long", int(begin_time)),
-                )
-                intent.putExtra(
-                    CalendarContract.EXTRA_EVENT_END_TIME,
-                    cast("java.lang.Long", int(end_time)),
-                )
-                Logger.info("cast('java.lang.Long', int(end_time)) succesfull!")
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            JS(str(begin_time.getTimeInMillis())),
+        )
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_END_TIME,
+            JS(str(end_time.getTimeInMillis())),
+        )
 
-        intent.putExtra(Events.DESCRIPTION, "Some description")
-        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+        intent.putExtra(Events.DESCRIPTION, JS("Some description"))
+        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
         intent.setAction(Intent.ACTION_INSERT)
 
         Logger.info(f"intent: {intent}")
