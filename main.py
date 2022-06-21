@@ -1,10 +1,13 @@
+import os
+
+import psycopg2
 from jnius import autoclass, cast
 from kivy.lang import Builder
 from kivy.logger import Logger
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineListItem
+from kivymd.uix.screen import MDScreen
 
 # from kivy.utils import platform
 
@@ -18,42 +21,42 @@ from kivymd.uix.list import OneLineListItem
 KV = """
 <ManufacturesSelect>:
     id: manufacture_select
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
-        spacing: dp(10)
-        padding: dp(20)
-        pos_hint:{'y': 0.85}
+        MDBoxLayout:
+            spacing: dp(5)
+            padding: dp(20)
+            pos_hint:{'y': 0.9}
 
-        BoxLayout:
-            size_hint_y: None
-            height: self.minimum_height
+            MDBoxLayout:
+                size_hint_y: None
+                height: self.minimum_height
 
-            MDIconButton:
-                icon: 'magnify'
+                MDIconButton:
+                    icon: 'magnify'
 
-            MDTextField:
-                id: search_field
-                hint_text: 'Search for Manufacturer'
-                on_text:
-                    root.set_manf_list(self.text)
+                MDTextField:
+                    id: search_field
+                    hint_text: 'Search for Manufacturer'
+                    on_text:
+                        root.set_manf_list(self.text)
 
-    RecycleView:
-        pos_hint:{'center_y': 0.4}
+        MDScrollViewRefreshLayout:
 
-        MDList:
-            id: manufacture
+            MDList:
+                id: manufacture
 
-    BoxLayout:
-        id: tool_select
+        MDBoxLayout:
+            id: tool_select
 
 <ToolSelect>:
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
         spacing: dp(10)
         padding: dp(20)
         pos_hint:{'y': 0.75}
 
-        BoxLayout:
+        MDBoxLayout:
             size_hint_y: None
             height: self.minimum_height
 
@@ -66,18 +69,52 @@ KV = """
                 on_text:
                     root.set_tools_list(self.text)
 
-    RecycleView:
-        pos_hint:{'center_x': 0.5, 'center_y': 0.3}
+        MDScrollViewRefreshLayout:
+            pos_hint:{'center_x': 0.5, 'center_y': 0.3}
 
-        MDList:
-            id: tools
+            MDList:
+                id: tools
 
+        MDRectangleFlatButton:
+            pos_hint:{'center_x': 0.5, 'center_y': 0.1}
+            text: "Set schedules"
+            theme_text_color: "Custom"
+            text_color: 1, 0, 0, 1
+            line_color: 0, 0, 1, 1
+            on_release:
+                root.set_tool_schedule(search_tool.text)
 
 """
 
-manufactures = ["Stihl", "Obi", "ABUS", "Bosch", "HYMER"]
 
-tools = ["Kettensäge", "Presslufthammer", "Schleifgerät", "Nagel"]
+def get_tools():
+    conn = psycopg2.connect(
+        host="ec2-63-34-180-86.eu-west-1.compute.amazonaws.com",
+        database="d8dlmbjnjbhh45",
+        user="pbjqydxrhoiqhd",
+        password=os.getenv("POSTGRES_PASSWORD"),
+    )
+    cur = conn.cursor()
+    cur.execute("SELECT name FROM tools")
+    tools = cur.fetchall()
+    cur.close()
+    conn.close()
+    return tools
+
+
+def get_manufactures():
+    conn = psycopg2.connect(
+        host="ec2-63-34-180-86.eu-west-1.compute.amazonaws.com",
+        database="d8dlmbjnjbhh45",
+        user="pbjqydxrhoiqhd",
+        password=os.getenv("POSTGRES_PASSWORD"),
+    )
+    cur = conn.cursor()
+    cur.execute("SELECT name FROM manufacture")
+    manufactures = cur.fetchall()
+    cur.close()
+    conn.close()
+    return manufactures
 
 
 def set_schedule(tool):
@@ -86,43 +123,28 @@ def set_schedule(tool):
         Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
-        # JS = autoclass("java.lang.String")
-        # JI = autoclass("java.lang.Integer")
-        # JL = autoclass("java.lang.Long")
+        JS = autoclass("java.lang.String")
         intent = Intent()
 
-        begin_time = Calendar.getInstance()
-        end_time = Calendar.getInstance()
-        begin_time.set(2022, 5, 26, 7, 30)
-        end_time.set(2022, 5, 26, 13, 30)
+        date = Calendar.getInstance()
+        date.set(2022, 5, 26, 7, 30)
 
         intent.setData(Events.CONTENT_URI)
-        intent.putExtra(Events.TITLE, tool)
-        Logger.info(f"begin_time: {begin_time}")
-        Logger.info(f"end_time: {end_time}")
+        intent.putExtra(Events.TITLE, JS(tool))
 
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, JS("true"))
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            str(begin_time.getTimeInMillis()),
+            JS(str(date.getTimeInMillis())),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            str(end_time.getTimeInMillis()),
+            JS(str(date.getTimeInMillis())),
         )
 
-        try:
-            Logger.info(
-                f"intent[CalendarContract.EXTRA_EVENT_END_TIME]: "
-                f"{intent[CalendarContract.EXTRA_EVENT_END_TIME]}"
-            )
-        except Exception:
-            pass
-
-        intent.putExtra(Events.DESCRIPTION, "Some description")
-        intent.putExtra(Events.RRULE, "FREQ=WEEKLY;BYDAY=MO;COUNT=3")
+        intent.putExtra(Events.DESCRIPTION, JS("Some description"))
+        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
         intent.setAction(Intent.ACTION_INSERT)
-
-        Logger.info(f"intent: {intent}")
 
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
         currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
@@ -131,7 +153,7 @@ def set_schedule(tool):
         Logger.exception(err)
 
 
-class ManufacturesSelect(Screen):
+class ManufacturesSelect(MDScreen):
     def __init__(self, **kwargs) -> None:
         super(ManufacturesSelect, self).__init__(**kwargs)
 
@@ -154,16 +176,16 @@ class ManufacturesSelect(Screen):
         try:
             self.ids.tool_select.clear_widgets()
             self.ids.manufacture.clear_widgets()
-            for man in manufactures:
-                if text.casefold() in man.casefold():
+            for man in get_manufactures():
+                if text.casefold() in man[0].casefold():
                     self.ids.manufacture.add_widget(
-                        OneLineListItem(text=man, on_press=self.pressed)
+                        OneLineListItem(text=man[0], on_press=self.pressed)
                     )
         except Exception as err:
             Logger.exception(err)
 
 
-class ToolSelect(BoxLayout):
+class ToolSelect(MDBoxLayout):
     def __init__(self, **kwargs) -> None:
         super(ToolSelect, self).__init__(**kwargs)
 
@@ -172,18 +194,20 @@ class ToolSelect(BoxLayout):
             self.ids.tools.clear_widgets()
             self.ids.search_tool.text = value.text + " "
             # need to somehow disable set_list() after here
-            Logger.info(value.text)
-            set_schedule(value.text)
+            # set_schedule(value.text)
         except Exception as err:
             Logger.exception(err)
+
+    def set_tool_schedule(self, tool):
+        set_schedule(tool)
 
     def set_tools_list(self, text=" "):
         try:
             self.ids.tools.clear_widgets()
-            for tool in tools:
-                if text.casefold() in tool.casefold():
+            for tool in get_tools():
+                if text.casefold() in tool[0].casefold():
                     self.ids.tools.add_widget(
-                        OneLineListItem(text=tool, on_press=self.pressed)
+                        OneLineListItem(text=tool[0], on_press=self.pressed)
                     )
         except Exception as err:
             Logger.exception(err)

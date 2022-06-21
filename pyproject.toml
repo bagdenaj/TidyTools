@@ -11,6 +11,7 @@ kivymd = "^0.104.2"
 setuptools = "^62.3.3"
 pyjnius = "^1.4.1"
 pre-commit = "^2.19.0"
+psycopg2 = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.10.1"
