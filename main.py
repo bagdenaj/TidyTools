@@ -4,19 +4,11 @@ import psycopg2
 from jnius import autoclass, cast
 from kivy.lang import Builder
 from kivy.logger import Logger
+from kivy.utils import platform
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineListItem
 from kivymd.uix.screen import MDScreen
-
-# from kivy.utils import platform
-
-# if platform == 'android':
-#     from jnius import autoclass, cast
-#     JS = autoclass('java.lang.String')
-#     Intent = autoclass('android.content.Intent')
-#     PythonActivity = autoclass('org.kivy.android.PythonActivity')
-#     currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
 
 KV = """
 <ManufacturesSelect>:
@@ -118,7 +110,7 @@ def get_manufactures():
 
 
 def set_schedule(tool):
-    try:
+    if platform == "android":
         Intent = autoclass("android.content.Intent")
         Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
@@ -149,8 +141,8 @@ def set_schedule(tool):
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
         currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
         currentActivity.startActivity(intent)
-    except Exception as err:
-        Logger.exception(err)
+    if platform == "win":
+        print(f"Now exporting {tool}")
 
 
 class ManufacturesSelect(MDScreen):
