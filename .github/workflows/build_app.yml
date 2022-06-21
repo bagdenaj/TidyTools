@@ -25,6 +25,8 @@ jobs:
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
+        env:
+          - POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         id: buildozer
         with:
           repository_root: main
@@ -45,6 +47,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v2
+        env:
+          - POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         with:
           python-version: 3.7
           architecture: x64
