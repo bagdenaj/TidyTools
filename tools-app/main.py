@@ -1,6 +1,4 @@
-import os
-
-import psycopg2
+import requests
 from jnius import autoclass, cast
 from kivy.lang import Builder
 from kivy.logger import Logger
@@ -80,33 +78,13 @@ KV = """
 
 
 def get_tools():
-    conn = psycopg2.connect(
-        host="ec2-63-34-180-86.eu-west-1.compute.amazonaws.com",
-        database="d8dlmbjnjbhh45",
-        user="pbjqydxrhoiqhd",
-        password=os.getenv("POSTGRES_PASSWORD"),
-    )
-    cur = conn.cursor()
-    cur.execute("SELECT name FROM tools")
-    tools = cur.fetchall()
-    cur.close()
-    conn.close()
-    return tools
+    response = requests.get("http://127.0.0.1:8000/get_tools")
+    return response.json()
 
 
 def get_manufactures():
-    conn = psycopg2.connect(
-        host="ec2-63-34-180-86.eu-west-1.compute.amazonaws.com",
-        database="d8dlmbjnjbhh45",
-        user="pbjqydxrhoiqhd",
-        password=os.getenv("POSTGRES_PASSWORD"),
-    )
-    cur = conn.cursor()
-    cur.execute("SELECT name FROM manufacture")
-    manufactures = cur.fetchall()
-    cur.close()
-    conn.close()
-    return manufactures
+    response = requests.get("http://127.0.0.1:8000/get_manufactures")
+    return response.json()
 
 
 def set_schedule(tool):

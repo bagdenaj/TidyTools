@@ -8,6 +8,7 @@ authors = ["bagdenaj <jo.bagd@posteo.de>"]
 python = "^3.9"
 fastapi = "^0.78.0"
 psycopg2 = "^2.9.3"
+uvicorn = "^0.17.6"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
