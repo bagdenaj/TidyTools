@@ -16,19 +16,20 @@ jobs:
   build-android:
     name: TidyTools
     runs-on: ubuntu-latest
+    working-directory: ./tools-app/
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: ./tools-app/main
+          path: main
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
         with:
-          repository_root: ./tools-app/main
-          workdir: ./tools-app/
+          repository_root: main
+          workdir: .
           buildozer_version: stable
 
       - name: Upload artifacts
@@ -51,5 +52,4 @@ jobs:
 
       - name: Push binary to data branch
         if: github.event_name == 'push'
-        working-directory: ./tools-app/
         run: python .ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" main data bin
