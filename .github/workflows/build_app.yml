@@ -16,7 +16,7 @@ jobs:
   build-android:
     name: TidyTools
     runs-on: ubuntu-latest
-    working-directory: ./tools-app/
+    workdir: ./tools-app/
 
     steps:
       - name: Checkout
