@@ -1,0 +1,21 @@
+version: '2'
+services:
+  web:
+    build: tools-api/
+    restart: unless-stopped
+    command: bash -c 'while !</dev/tcp/database/5432; do sleep 1; done; uvicorn app:app --reload --proxy-headers --host 0.0.0.0 --port 8000'
+    ports:
+      - 8000:8000
+  database:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=finding_home
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres_data: null
