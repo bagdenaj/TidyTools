@@ -78,12 +78,12 @@ KV = """
 
 
 def get_tools():
-    response = requests.get("http://127.0.0.1:8000/get_tools")
+    response = requests.get("https://tidytools.herokuapp.com/get_tools")
     return response.json()
 
 
 def get_manufactures():
-    response = requests.get("http://127.0.0.1:8000/get_manufactures")
+    response = requests.get("https://tidytools.herokuapp.com/get_manufactures")
     return response.json()
 
 
