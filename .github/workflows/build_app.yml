@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: ./tools-app/main
+          path: main
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
