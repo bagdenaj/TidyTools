@@ -2,4 +2,4 @@ build:
   docker:
     web: ./tools-api/Dockerfile
 run:
-  web: uvicorn app:app --reload --proxy-headers --host 0.0.0.0 --port 8000
+  web: uvicorn app:app --reload
