@@ -29,8 +29,8 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         id: buildozer
         with:
-          repository_root: ./tools-app/main
-          workdir: .
+          repository_root: main
+          workdir: ./tools-app/
           buildozer_version: stable
 
       - name: Upload artifacts
