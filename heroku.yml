@@ -2,4 +2,4 @@ build:
   docker:
     web: ./tools-api/Dockerfile
 run:
-  web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker tools-api.app:app
+  web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker app:app
