@@ -1,3 +1,5 @@
 build:
   docker:
     web: ./tools-api/Dockerfile
+run:
+  web: uvicorn tools-api.app:app --host=0.0.0.0 --port=${PORT:-5000}
