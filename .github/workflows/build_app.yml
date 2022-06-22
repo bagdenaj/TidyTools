@@ -28,7 +28,7 @@ jobs:
         id: buildozer
         with:
           repository_root: ./tools-app/main
-          workdir: ./tools-app/
+          workdir: .
           buildozer_version: stable
 
       - name: Upload artifacts
@@ -51,4 +51,4 @@ jobs:
 
       - name: Push binary to data branch
         if: github.event_name == 'push'
-        run: ls -a tools-app/main && python tools-app/main/.ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" main data bin
+        run: sudo apt install tree && tree && python .ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" main data bin
