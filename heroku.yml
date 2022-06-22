@@ -1,5 +1,0 @@
-build:
-  docker:
-    web: ./tools-api/Dockerfile
-run:
-  web: uvicorn app:app --reload --proxy-headers
