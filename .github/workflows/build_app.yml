@@ -45,8 +45,6 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v2
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         with:
           python-version: 3.7
           architecture: x64
