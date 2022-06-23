@@ -30,11 +30,13 @@ def get_manufactures():
         return manufactures
 
 
-@app.get("/get_tools")
-def get_tools():
+@app.get("/get_tools/{seleceted_manufacturer}")
+def get_tools(seleceted_manufacturer: str):
     # query tools according to selected manufacturer
     with get_cursor() as cur:
-        cur.execute("SELECT name FROM tools")
+        cur.execute(
+            "SELECT name FROM tools WHERE manufacture=(%s)", (seleceted_manufacturer,)
+        )
         tools = cur.fetchall()
         cur.close()
         return tools

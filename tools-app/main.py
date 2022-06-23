@@ -77,8 +77,10 @@ KV = """
 """
 
 
-def get_tools():
-    response = requests.get("https://tidytools.herokuapp.com/get_tools")
+def get_tools(selected_manufacturer):
+    response = requests.get(
+        f"https://tidytools.herokuapp.com/get_tools/{selected_manufacturer}"
+    )
     return response.json()
 
 
@@ -97,7 +99,7 @@ def set_schedule(tool):
         intent = Intent()
 
         date = Calendar.getInstance()
-        date.set(2022, 5, 26, 7, 30)
+        date.set(2022, 5, 26)
 
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, JS(tool))
@@ -127,9 +129,9 @@ class ManufacturesSelect(MDScreen):
     def __init__(self, **kwargs) -> None:
         super(ManufacturesSelect, self).__init__(**kwargs)
 
-    def add_toolselect(self):
+    def add_toolselect(self, selected_manufacturer):
         try:
-            toolselect = ToolSelect()
+            toolselect = ToolSelect(selected_manufacturer)
             self.ids.tool_select.add_widget(toolselect)
         except Exception as err:
             Logger.exception(err)
@@ -138,7 +140,7 @@ class ManufacturesSelect(MDScreen):
         try:
             self.ids.manufacture.clear_widgets()
             self.ids.search_field.text = value.text + " "
-            self.add_toolselect()
+            self.add_toolselect(value.text)
         except Exception as err:
             Logger.exception(err)
 
@@ -156,7 +158,8 @@ class ManufacturesSelect(MDScreen):
 
 
 class ToolSelect(MDBoxLayout):
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, selected_manufacturer, **kwargs) -> None:
+        self.selected_manufacturer = selected_manufacturer
         super(ToolSelect, self).__init__(**kwargs)
 
     def pressed(self, value):
@@ -174,7 +177,7 @@ class ToolSelect(MDBoxLayout):
     def set_tools_list(self, text=" "):
         try:
             self.ids.tools.clear_widgets()
-            for tool in get_tools():
+            for tool in get_tools(self.selected_manufacturer):
                 if text.casefold() in tool[0].casefold():
                     self.ids.tools.add_widget(
                         OneLineListItem(text=tool[0], on_press=self.pressed)
