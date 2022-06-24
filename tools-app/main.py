@@ -108,11 +108,11 @@ def set_schedule(tool):
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, JS("true"))
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
+            str(date.getTimeInMillis()),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
+            str(date.getTimeInMillis()),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
@@ -134,11 +134,11 @@ def set_schedule(tool):
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, JS("true"))
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
+            str(date.getTimeInMillis()),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
+            str(date.getTimeInMillis()),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some other description"))
