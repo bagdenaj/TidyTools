@@ -91,35 +91,31 @@ def get_manufactures():
 
 def set_schedule(tool):
     if platform == "android":
-        from kivy.properties import BooleanProperty, NumericProperty
-
-        allday = BooleanProperty()
         Intent = autoclass("android.content.Intent")
         Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
-        JL = autoclass("java.lang.Long")
+        JB = autoclass("java.lang.Boolean")
         intent = Intent()
 
         date = Calendar.getInstance()
         date.set(2022, 5, 26)
-        eventdate = NumericProperty(date.getTimeInMillis())
 
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, JS(tool))
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_ALL_DAY,
-            allday,
+            JB(True),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            eventdate,
+            date.getTimeInMillis(),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JL(str(date.getTimeInMillis())),
+            date.getTimeInMillis(),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
