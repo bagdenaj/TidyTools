@@ -105,14 +105,17 @@ def set_schedule(tool):
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, JS(tool))
 
-        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, JS("true"))
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_ALL_DAY,
+            cast("java.lang.CharSequence", JS("true")),
+        )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            str(date.getTimeInMillis()),
+            cast("java.lang.CharSequence", JS(str(date.getTimeInMillis()))),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            str(date.getTimeInMillis()),
+            cast("java.lang.CharSequence", JS(str(date.getTimeInMillis()))),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
