@@ -91,6 +91,9 @@ def get_manufactures():
 
 def set_schedule(tool):
     if platform == "android":
+        from kivy.properties import BooleanProperty, LongProperty
+
+        allday = BooleanProperty()
         Intent = autoclass("android.content.Intent")
         Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
@@ -101,31 +104,23 @@ def set_schedule(tool):
 
         date = Calendar.getInstance()
         date.set(2022, 5, 26)
+        eventdate = LongProperty(date.getTimeInMillis())
 
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, JS(tool))
 
-        try:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_ALL_DAY,
-                True,
-            )
-        except Exception as err:
-            Logger.info(err)
-        try:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
-            )
-        except Exception as err:
-            Logger.info(err)
-        try:
-            intent.putExtra(
-                CalendarContract.EXTRA_EVENT_END_TIME,
-                JL(str(date.getTimeInMillis())),
-            )
-        except Exception as err:
-            Logger.info(err)
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_ALL_DAY,
+            allday,
+        )
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            eventdate,
+        )
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_END_TIME,
+            JL(str(date.getTimeInMillis())),
+        )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
         intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
