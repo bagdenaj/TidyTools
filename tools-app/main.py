@@ -96,6 +96,7 @@ def set_schedule(tool):
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
+
         intent = Intent()
 
         date = Calendar.getInstance()
@@ -104,10 +105,25 @@ def set_schedule(tool):
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, JS(tool))
 
-        intent.putExtra(
-            CalendarContract.EXTRA_EVENT_ALL_DAY,
-            cast("(Ljava/lang/String;Z)Landroid/content/Intent;", True),
-        )
+        try:
+            JB = autoclass("Ljava/lang/String;Z")
+            intent.putExtra(
+                CalendarContract.EXTRA_EVENT_ALL_DAY,
+                JB(True),
+            )
+        except Exception as err:
+            Logger.info('JB = autoclass("Ljava/lang/String;Z")' + err)
+            try:
+                JB = autoclass("java.lang.Boolean")
+                intent.putExtra(
+                    CalendarContract.EXTRA_EVENT_ALL_DAY,
+                    cast("(Ljava/lang/String;Z)Landroid/content/Intent;", JB(True)),
+                )
+            except Exception as err:
+                Logger.info(
+                    'cast("(Ljava/lang/String;Z)Landroid/content/Intent;", JB(True))'
+                    + err
+                )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
             cast(
