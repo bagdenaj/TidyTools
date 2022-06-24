@@ -105,9 +105,7 @@ def set_schedule(tool):
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, JS(tool))
 
-        intent.putExtra(
-            CalendarContract.EXTRA_EVENT_ALL_DAY, cast("java.lang.Boolean", JS("true"))
-        )
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, JS("true"))
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
             cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
@@ -118,6 +116,32 @@ def set_schedule(tool):
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
+        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
+        intent.setAction(Intent.ACTION_INSERT)
+
+        PythonActivity = autoclass("org.kivy.android.PythonActivity")
+        currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
+        currentActivity.startActivity(intent)
+
+        # second intent
+
+        date = Calendar.getInstance()
+        date.set(2022, 7, 1)
+
+        intent.setData(Events.CONTENT_URI)
+        intent.putExtra(Events.TITLE, JS("Title second intent"))
+
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, JS("true"))
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+            cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
+        )
+        intent.putExtra(
+            CalendarContract.EXTRA_EVENT_END_TIME,
+            cast("java.lang.Long", JS(str(date.getTimeInMillis()))),
+        )
+
+        intent.putExtra(Events.DESCRIPTION, JS("Some other description"))
         intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
         intent.setAction(Intent.ACTION_INSERT)
 
