@@ -112,15 +112,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            cast(
-                "(Ljava/lang/String;J)Landroid/content/Intent;", date.getTimeInMillis()
-            ),
+            cast("java.lang.Long", date.getTimeInMillis()),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            cast(
-                "(Ljava/lang/String;J)Landroid/content/Intent;", date.getTimeInMillis()
-            ),
+            cast("java.lang.Long", date.getTimeInMillis()),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
@@ -131,31 +127,6 @@ def set_schedule(tool):
         currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
         currentActivity.startActivity(intent)
 
-        # second intent
-
-        date = Calendar.getInstance()
-        date.set(2022, 7, 1)
-
-        intent.setData(Events.CONTENT_URI)
-        intent.putExtra(Events.TITLE, JS("Title second intent"))
-
-        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, JS("true"))
-        intent.putExtra(
-            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            str(date.getTimeInMillis()),
-        )
-        intent.putExtra(
-            CalendarContract.EXTRA_EVENT_END_TIME,
-            str(date.getTimeInMillis()),
-        )
-
-        intent.putExtra(Events.DESCRIPTION, JS("Some other description"))
-        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
-        intent.setAction(Intent.ACTION_INSERT)
-
-        PythonActivity = autoclass("org.kivy.android.PythonActivity")
-        currentActivity = cast("android.app.Activity", PythonActivity.mActivity)
-        currentActivity.startActivity(intent)
     if platform == "win":
         print(f"Now exporting {tool}")
 
