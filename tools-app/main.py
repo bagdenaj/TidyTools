@@ -103,6 +103,7 @@ def set_schedule(tool):
         date.set(2022, 5, 26)
 
         intent.setData(Events.CONTENT_URI)
+        intent.setType("vnd.android.cursor.item/event")
         intent.putExtra(Events.TITLE, JS(tool))
 
         intent.putExtra(
