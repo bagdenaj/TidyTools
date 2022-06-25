@@ -105,9 +105,10 @@ def set_schedule(tool):
         intent.setData(Events.CONTENT_URI)
         intent.putExtra(Events.TITLE, JS(tool))
 
+        JB = autoclass("java.lang.Boolean")
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_ALL_DAY,
-            cast("java.lang.Boolean", True),
+            cast("java.lang.Boolean", JB(True)),
         )
 
         intent.putExtra(
