@@ -101,7 +101,7 @@ def set_schedule(tool):
         intent = Intent()
 
         date = Calendar.getInstance()
-        date.set(2022, 5, 26)
+        date.set(2022, 8, 10)
 
         intent.setData(Events.CONTENT_URI)
         intent.setType("vnd.android.cursor.item/event")
@@ -114,11 +114,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            float(date.getTimeInMillis()),
+            cast("java.lang.Long", int(date.getTimeInMillis())),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            float(date.getTimeInMillis()),
+            cast("java.lang.Long", int(date.getTimeInMillis())),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
