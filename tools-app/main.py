@@ -114,11 +114,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            JL(str(date.getTimeInMillis())).longValue(),
+            JL.parseLong(cast("java.lang.CharSequence", date.getTimeInMillis())),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JL(str(date.getTimeInMillis())).longValue(),
+            JL.parseLong(cast("java.lang.CharSequence", date.getTimeInMillis())),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
