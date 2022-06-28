@@ -92,16 +92,16 @@ def get_manufactures():
 def set_schedule(tool):
     if platform == "android":
         Intent = autoclass("android.content.Intent")
-        Calendar = autoclass("java.util.Calendar")
+        # Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
-        JL = autoclass("java.lang.Long")
+        # JL = autoclass("java.lang.Long")
 
         intent = Intent()
 
-        date = Calendar.getInstance()
-        date.set(2022, 8, 10)
+        # date = Calendar.getInstance()
+        # date.set(2022, 8, 10)
 
         intent.setData(Events.CONTENT_URI)
         intent.setType("vnd.android.cursor.item/event")
@@ -114,11 +114,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            JL.parseLong(str(date.getTimeInMillis())),
+            200,
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JL.parseLong(str(date.getTimeInMillis())),
+            200,
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
