@@ -1,4 +1,4 @@
-from ctypes import c_long
+# from ctypes import c_long
 
 import requests
 from jnius import autoclass, cast
@@ -9,6 +9,7 @@ from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineListItem
 from kivymd.uix.screen import MDScreen
+from numpy import longlong
 
 KV = """
 <ManufacturesSelect>:
@@ -116,11 +117,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            cast("java.lang.Long", c_long(date.getTimeInMillis())),
+            cast("java.lang.Long", longlong(date.getTimeInMillis())),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            cast("java.lang.Long", c_long(date.getTimeInMillis())),
+            cast("java.lang.Long", longlong(date.getTimeInMillis())),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
