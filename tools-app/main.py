@@ -9,8 +9,7 @@ from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineListItem
 from kivymd.uix.screen import MDScreen
-
-# from numpy import ulonglong
+from numpy import int64
 
 KV = """
 <ManufacturesSelect>:
@@ -100,7 +99,7 @@ def set_schedule(tool):
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
-        JL = autoclass("java.lang.Long")
+        # JL = autoclass("java.lang.Long")
 
         intent = Intent()
 
@@ -118,11 +117,11 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            JL.parseUnsignedLong(str(date.getTimeInMillis())),
+            int64(date.getTimeInMillis()),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JL.parseUnsignedLong(str(date.getTimeInMillis())),
+            int64(date.getTimeInMillis()),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
