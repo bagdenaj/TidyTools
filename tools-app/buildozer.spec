@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,certifi,charset-normalizer,docutils,idna,kivy-garden,pyjnius,kivy==master,kivymd,pillow,pygments,requests,six,urllib3,requests,numpy
+requirements = python3,certifi,charset-normalizer,docutils,idna,kivy-garden,pyjnius,kivy==master,kivymd,pillow,pygments,requests,six,urllib3,requests
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -46,7 +46,7 @@ requirements = python3,certifi,charset-normalizer,docutils,idna,kivy-garden,pyjn
 #garden_requirements =
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = %(source.dir)s/data/presplash.png
 
 # (str) Icon of the application
 #icon.filename = %(source.dir)s/data/icon.png
@@ -117,7 +117,7 @@ android.permissions = INTERNET,WRITE_CALENDAR
 # (bool) If True, then skip trying to update the Android sdk
 # This can be useful to avoid excess Internet downloads or save time
 # when an update is due and you just want to test/build your package
-# android.skip_update = False
+android.skip_update = True
 
 # (bool) If True, then automatically accept SDK license
 # agreements. This is intended for automation only. If set to False,
