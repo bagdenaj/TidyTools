@@ -26,11 +26,10 @@ jobs:
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
-        run: sudo apt-get install -y aidl
         with:
           repository_root: main
           workdir: ./tools-app/
-          buildozer_version: stable
+          buildozer_version: 1.2
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
