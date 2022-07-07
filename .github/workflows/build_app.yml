@@ -24,7 +24,7 @@ jobs:
           path: main
 
       - name: Install Aidl
-        run: sudo apt-get install -y build-tools
+        run: sudo apt-get install -y build-essential
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
