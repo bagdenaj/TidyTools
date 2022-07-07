@@ -49,7 +49,7 @@ requirements = python3,certifi,charset-normalizer,docutils,idna,kivy-garden,pyjn
 presplash.filename = %(source.dir)s/img/presplash.png
 
 # (str) Icon of the application
-#icon.filename = %(source.dir)s/data/icon.png
+icon.filename = %(source.dir)s/img/icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
