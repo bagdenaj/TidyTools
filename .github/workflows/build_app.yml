@@ -23,12 +23,10 @@ jobs:
         with:
           path: main
 
-      - name: Install Aidl
-        run: sudo apt-get install -y aidl
-
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
+        run: sudo apt-get install -y aidl
         with:
           repository_root: main
           workdir: ./tools-app/
