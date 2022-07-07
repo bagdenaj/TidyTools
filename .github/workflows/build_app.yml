@@ -23,13 +23,16 @@ jobs:
         with:
           path: main
 
+      - name: Install Aidl
+        run: sudo apt-get install -y build-tools
+
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
         with:
           repository_root: main
           workdir: ./tools-app/
-          buildozer_version: 1.2
+          buildozer_version: stable
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
