@@ -160,7 +160,7 @@ class ManufacturesSelect(MDScreen):
             self.ids.tool_select.clear_widgets()
             self.ids.manufacture.clear_widgets()
             for man in get_manufactures():
-                if man[0].startswith(text.casefold()):
+                if man[0].casefold().startswith(text):
                     self.ids.manufacture.add_widget(
                         OneLineListItem(text=man[0], on_press=self.pressed)
                     )
@@ -187,7 +187,7 @@ class ToolSelect(MDBoxLayout):
         try:
             self.ids.tools.clear_widgets()
             for tool in get_tools(self.selected_manufacturer):
-                if tool[0].startswith(text.casefold()):
+                if tool[0].casefold().startswith(text):
                     self.ids.tools.add_widget(
                         OneLineListItem(text=tool[0], on_press=self.pressed)
                     )
