@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tidytools"
+version = "0.1.0"
+description = ""
+authors = ["bagdenaj <jo.bagd@posteo.de>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Kivy = "^2.1.0"
+kivymd = "^0.104.2"
+setuptools = "^62.3.3"
+pyjnius = "^1.4.1"
+
+[tool.poetry.dev-dependencies]
+isort = "^5.10.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
