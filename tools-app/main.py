@@ -9,7 +9,6 @@ from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineListItem
 from kivymd.uix.screen import MDScreen
-from numpy import int64
 
 KV = """
 <ManufacturesSelect>:
@@ -92,14 +91,13 @@ def get_manufactures():
     return response.json()
 
 
-def set_schedule(tool):
+def set_schedule(tool: str, schedules: list[str]):
     if platform == "android":
         Intent = autoclass("android.content.Intent")
         Calendar = autoclass("java.util.Calendar")
         CalendarContract = autoclass("android.provider.CalendarContract")
         Events = autoclass("android.provider.CalendarContract$Events")
         JS = autoclass("java.lang.String")
-        JL = autoclass("java.lang.Long")
 
         intent = Intent()
 
@@ -117,15 +115,15 @@ def set_schedule(tool):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            JL(int64(date.getTimeInMillis())),
+            date.getTimeInMillis(),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            JL(int64(date.getTimeInMillis())),
+            date.getTimeInMillis(),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
-        intent.putExtra(Events.RRULE, JS("FREQ=WEEKLY;BYDAY=MO;COUNT=3"))
+        intent.putExtra(Events.RRULE, JS(f"FREQ={schedules[0]}"))
         intent.setAction(Intent.ACTION_INSERT)
 
         PythonActivity = autoclass("org.kivy.android.PythonActivity")
@@ -177,13 +175,11 @@ class ToolSelect(MDBoxLayout):
         try:
             self.ids.tools.clear_widgets()
             self.ids.search_tool.text = value.text + " "
-            # need to somehow disable set_list() after here
-            # set_schedule(value.text)
         except Exception as err:
             Logger.exception(err)
 
     def set_tool_schedule(self, tool):
-        set_schedule(tool)
+        set_schedule(tool, ["MONTHLY"])
 
     def set_tools_list(self, text=" "):
         try:
