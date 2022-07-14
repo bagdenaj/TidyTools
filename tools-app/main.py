@@ -117,11 +117,11 @@ def set_schedule(tool: str, schedules: List[str]):
 
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-            date.getTimeInMillis(),
+            float(date.getTimeInMillis()),
         )
         intent.putExtra(
             CalendarContract.EXTRA_EVENT_END_TIME,
-            date.getTimeInMillis(),
+            float(date.getTimeInMillis()),
         )
 
         intent.putExtra(Events.DESCRIPTION, JS("Some description"))
@@ -160,7 +160,7 @@ class ManufacturesSelect(MDScreen):
             self.ids.tool_select.clear_widgets()
             self.ids.manufacture.clear_widgets()
             for man in get_manufactures():
-                if text.casefold() in man[0].casefold():
+                if man[0].startswith(text.casefold()):
                     self.ids.manufacture.add_widget(
                         OneLineListItem(text=man[0], on_press=self.pressed)
                     )
@@ -187,7 +187,7 @@ class ToolSelect(MDBoxLayout):
         try:
             self.ids.tools.clear_widgets()
             for tool in get_tools(self.selected_manufacturer):
-                if text.casefold() in tool[0].casefold():
+                if tool[0].startswith(text.casefold()):
                     self.ids.tools.add_widget(
                         OneLineListItem(text=tool[0], on_press=self.pressed)
                     )
