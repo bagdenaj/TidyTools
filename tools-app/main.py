@@ -1,5 +1,7 @@
 # from ctypes import c_long
 
+from typing import List
+
 import requests
 from jnius import autoclass, cast
 from kivy.lang import Builder
@@ -91,7 +93,7 @@ def get_manufactures():
     return response.json()
 
 
-def set_schedule(tool: str, schedules: list[str]):
+def set_schedule(tool: str, schedules: List[str]):
     if platform == "android":
         Intent = autoclass("android.content.Intent")
         Calendar = autoclass("java.util.Calendar")
